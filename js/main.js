@@ -1,4 +1,4 @@
-var side = 25;
+var side = 20;
 
 $(document).ready(function() {
   
@@ -102,29 +102,31 @@ $(document).ready(function() {
     });
   };
 
-  // Moves the snake in direction by 1 square
-  function moveSnake() {
-    switch(snake.direction) {
-      case "l":
-        snake.position[1] -= 1;
-        break;
-      case "u":
-        snake.position[0] -= 1;
-        // moveSnakeBody(0, "-");
-        break;
-      case "r":
-        snake.position[1] += 1;
-        // moveSnakeBody(1, "+");
-        break;
-      case "d":
-        snake.position[0] += 1;
-        // moveSnakeBody(0, "+");
-        break;
-      default: return;
-    }
+  // Given a new position for head, moves the snake in that direction by 1
+  function moveSnake(position) {
+    snake.position = position
     snake.coordinates.unshift([snake.position[0], snake.position[1]]);
     snake.coordinates.pop();
   };
+
+  // Generates the new snake's head position based on the snake's direction
+  function newMove() {
+    switch(snake.direction) {
+      case "l":
+        return [snake.position[0], snake.position[1] - 1];
+        break;
+      case "u":
+        return [snake.position[0] - 1, snake.position[1]];
+        break;
+      case "r":
+        return [snake.position[0], snake.position[1] + 1];
+        break;
+      case "d":
+        return [snake.position[0] + 1, snake.position[1]];
+        break;
+      default: return [];
+    }
+  }
 
   // Returns true if the snake's head eats the food
   function eatFood() {
@@ -159,23 +161,23 @@ $(document).ready(function() {
   };
 
   // Returns true if the game is over
-  function gameOver() {
-    return snakeHitWall() || snakeHitSelf();
+  function gameOver(position) {
+    return snakeHitWall(position) || snakeHitSelf(position);
   };
 
   // Returns true if the snake has hit the wall
-  function snakeHitWall() {
-    if (snake.position[0] < 0 || snake.position[0] >= side ||
-        snake.position[1] < 0 || snake.position[1] >= side) {
+  function snakeHitWall(position) {
+    if (position[0] < 0 || position[0] >= side ||
+        position[1] < 0 || position[1] >= side) {
       return true;
     }
   };
 
   // Returns true if the snake has hit itself
-  function snakeHitSelf() {
+  function snakeHitSelf(position) {
     for (var i = 1; i < snake.coordinates.length; i++) {
-      if (snake.position[0] === snake.coordinates[i][0] &&
-          snake.position[1] === snake.coordinates[i][1]) {
+      if (position[0] === snake.coordinates[i][0] &&
+          position[1] === snake.coordinates[i][1]) {
         return true;
       }
     }
@@ -194,8 +196,9 @@ $(document).ready(function() {
         food = generateFood();
         growSnake();
       }
-      moveSnake();
-      if (gameOver()) return gameOverScreen();
+      var newPosition = newMove();
+      if (gameOver(newPosition)) return gameOverScreen();
+      moveSnake(newPosition);
       grid = createGrid();
       render();
       takeTurn();
