@@ -21,11 +21,15 @@ h1 {
 
 .col {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border: 1px solid black;
   vertical-align: middle;
   text-align: center;
-  font-size: 12px;
-  line-height: 12px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.snake {
+  background: black;
 }

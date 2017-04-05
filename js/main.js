@@ -3,15 +3,19 @@ var side = 25;
 $(document).ready(function() {
   
   snake = createSnake();
-  grid = createGrid(snake);
-  render(grid);
-  changeDirection(snake);
+  food = generateFood();
+  grid = createGrid();
+  render();
+  changeDirection();
   takeTurn();
 
 
-  // Function definitions
+  ////////////////////////////
+  //  Function definitions  //
+  ////////////////////////////
 
-  function createGrid(snake) {
+  // Returns a 2D array representing the grid
+  function createGrid() {
     var grid = [];
     for (var i = 0; i < side; i++) {
       grid.push([]);
@@ -20,9 +24,11 @@ $(document).ready(function() {
       }
     }
     grid[snake.position[0]][snake.position[1]] = "O"
+    grid[food.position[0]][food.position[1]] = "F"
     return grid;
   };
 
+  // Creates the snake object
   function createSnake() {
     var midpoint = Math.floor(side/2)
     var snake = {
@@ -33,15 +39,18 @@ $(document).ready(function() {
     return snake;
   };
 
-  function render(grid) {
+  // Renders the grid to html
+  function render() {
     var gridRender = "<div class='grid'>"
-    // $(".container").append("<div class='grid'</div>");
     for (var row = 0; row < grid.length; row++) {
       gridRender += "<ul class='row row" + row + "'>"
-      // $(".grid").append("<ul class='row row" + row + "'></ul>");
       for (var col = 0; col < grid.length; col++) {
-        gridRender += "<li class='col'>" + grid[row][col] + "</li>";
-        // $(".row" + row).append("<li class='col'>" + grid[row][col] + "</li>");
+        if (grid[row][col] == "O") {
+          gridRender += "<li class='col snake'></li>";
+        }
+        else {
+          gridRender += "<li class='col'>" + grid[row][col] + "</li>";
+        }
       }
       gridRender += "</ul>";
     }
@@ -49,7 +58,8 @@ $(document).ready(function() {
     $(".container").html(gridRender)
   };
 
-  function changeDirection(snake) {
+  // Changes the direction of the snake based on key input
+  function changeDirection() {
     $(document).keydown(function(event) {
       switch(event.which) {
         case 37:
@@ -70,7 +80,8 @@ $(document).ready(function() {
     });
   };
 
-  function moveSnake(grid, snake) {
+  // Moves the snake in direction by 1 square
+  function moveSnake() {
     switch(snake.direction) {
       case "l":
         snake.position[1] -= 1;
@@ -88,23 +99,50 @@ $(document).ready(function() {
     }
   };
 
+  // Allows one 'turn' to take place
   function takeTurn() {
     setTimeout(function() {
-      moveSnake(grid, snake);
+      moveSnake();
       if (gameOver()) return gameOverScreen();
-      grid = createGrid(snake);
-      render(grid);
+      grid = createGrid();
+      render();
       takeTurn();
     }, 750);
   };
 
+  // Creates the food object
+  function generateFood() {
+    var x = getRandomNumber("x");
+    var y = getRandomNumber("y");
+    while (x == snake.position[0] && y == snake.position[1]) {
+      x = getRandomNumber("x");
+    }
+    var food = { position: [x, y] }
+    return food;
+  };
+
+  // Returns a random number from 0 to side - 1 (inclusive)
+  function getRandomNumber(axis) {
+    number = -1;
+    while (number < 0 || side <= number) {
+      number = Math.floor(Math.random() * (side));
+    }
+    return number; 
+  };
+
+  // Grows snake if it eats the food
+  function eatFood() {
+  }
+
+  // Returns true if the game is over
   function gameOver() {
-    if (snake.position[0] < 0 || snake.position[0] > side ||
-        snake.position[1] < 0 || snake.position[1] > side) {
+    if (snake.position[0] < 0 || snake.position[0] >= side ||
+        snake.position[1] < 0 || snake.position[1] >= side) {
       return true;
     }
   };
 
+  // Displays game over screen
   function gameOverScreen() {
     alert("Game over!");
   };
