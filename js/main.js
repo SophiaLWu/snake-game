@@ -154,17 +154,32 @@ $(document).ready(function() {
         break;
       default: return;
     }
-    console.log(snake.position);
+
     snake.coordinates.unshift([snake.position[0], snake.position[1]]);
-    console.log(snake.coordinates[0], snake.coordinates[1]);
   };
 
   // Returns true if the game is over
   function gameOver() {
+    return snakeHitWall() || snakeHitSelf();
+  };
+
+  // Returns true if the snake has hit the wall
+  function snakeHitWall() {
     if (snake.position[0] < 0 || snake.position[0] >= side ||
         snake.position[1] < 0 || snake.position[1] >= side) {
       return true;
     }
+  };
+
+  // Returns true if the snake has hit itself
+  function snakeHitSelf() {
+    for (var i = 1; i < snake.coordinates.length; i++) {
+      if (snake.position[0] === snake.coordinates[i][0] &&
+          snake.position[1] === snake.coordinates[i][1]) {
+        return true;
+      }
+    }
+    return false;
   };
 
   // Displays game over screen
@@ -172,7 +187,7 @@ $(document).ready(function() {
     alert("Game over!");
   };
 
-    // Allows one 'turn' to take place
+  // Allows one 'turn' to take place
   function takeTurn() {
     setTimeout(function() {
       if (eatFood()) {
@@ -184,7 +199,7 @@ $(document).ready(function() {
       grid = createGrid();
       render();
       takeTurn();
-    }, 300);
+    }, 150);
   };
 
 });
