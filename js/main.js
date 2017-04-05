@@ -2,8 +2,8 @@ var side = 25;
 
 $(document).ready(function() {
   
-  snake = createSnake();
-  food = generateFood();
+  var snake = createSnake();
+  var food = generateFood();
   grid = createGrid();
   render();
   changeDirection();
@@ -23,8 +23,10 @@ $(document).ready(function() {
         grid[i].push(" ");
       }
     }
-    grid[snake.position[0]][snake.position[1]] = "O"
     grid[food.position[0]][food.position[1]] = "F"
+    for (var i = 0; i < snake.coordinates.length; i++) {
+      grid[snake.coordinates[i][0]][snake.coordinates[i][1]] = "O";
+    }
     return grid;
   };
 
@@ -37,6 +39,26 @@ $(document).ready(function() {
       coordinates: [[midpoint, midpoint]],
     }
     return snake;
+  };
+
+  // Creates the food object
+  function generateFood() {
+    var x = getRandomNumber("x");
+    var y = getRandomNumber("y");
+    while (x === snake.position[0] && y === snake.position[1]) {
+      x = getRandomNumber("x");
+    }
+    var food = { position: [x, y] }
+    return food;
+  };
+
+  // Returns a random number from 0 to side - 1 (inclusive)
+  function getRandomNumber(axis) {
+    number = -1;
+    while (number < 0 || side <= number) {
+      number = Math.floor(Math.random() * (side));
+    }
+    return number; 
   };
 
   // Renders the grid to html
@@ -88,6 +110,41 @@ $(document).ready(function() {
         break;
       case "u":
         snake.position[0] -= 1;
+        // moveSnakeBody(0, "-");
+        break;
+      case "r":
+        snake.position[1] += 1;
+        // moveSnakeBody(1, "+");
+        break;
+      case "d":
+        snake.position[0] += 1;
+        // moveSnakeBody(0, "+");
+        break;
+      default: return;
+    }
+    snake.coordinates.unshift([snake.position[0], snake.position[1]]);
+    snake.coordinates.pop();
+  };
+
+  // Returns true if the snake's head eats the food
+  function eatFood() {
+    if (snake.position[0] === food.position[0] &&
+        snake.position[1] === food.position[1]) { 
+      return true;
+    }
+  };
+
+  // Grows snake by 1 unit
+  function growSnake() {
+    var snakeBody = snake.coordinates
+    var snakeEnd = snakeBody[snakeBody.length - 1]
+    console.log(snake.position);
+    switch(snake.direction) {
+      case "l":
+        snake.position[1] -= 1;
+        break;
+      case "u":
+        snake.position[0] -= 1;
         break;
       case "r":
         snake.position[1] += 1;
@@ -97,42 +154,10 @@ $(document).ready(function() {
         break;
       default: return;
     }
+    console.log(snake.position);
+    snake.coordinates.unshift([snake.position[0], snake.position[1]]);
+    console.log(snake.coordinates[0], snake.coordinates[1]);
   };
-
-  // Allows one 'turn' to take place
-  function takeTurn() {
-    setTimeout(function() {
-      moveSnake();
-      if (gameOver()) return gameOverScreen();
-      grid = createGrid();
-      render();
-      takeTurn();
-    }, 750);
-  };
-
-  // Creates the food object
-  function generateFood() {
-    var x = getRandomNumber("x");
-    var y = getRandomNumber("y");
-    while (x == snake.position[0] && y == snake.position[1]) {
-      x = getRandomNumber("x");
-    }
-    var food = { position: [x, y] }
-    return food;
-  };
-
-  // Returns a random number from 0 to side - 1 (inclusive)
-  function getRandomNumber(axis) {
-    number = -1;
-    while (number < 0 || side <= number) {
-      number = Math.floor(Math.random() * (side));
-    }
-    return number; 
-  };
-
-  // Grows snake if it eats the food
-  function eatFood() {
-  }
 
   // Returns true if the game is over
   function gameOver() {
@@ -145,6 +170,21 @@ $(document).ready(function() {
   // Displays game over screen
   function gameOverScreen() {
     alert("Game over!");
+  };
+
+    // Allows one 'turn' to take place
+  function takeTurn() {
+    setTimeout(function() {
+      if (eatFood()) {
+        food = generateFood();
+        growSnake();
+      }
+      moveSnake();
+      if (gameOver()) return gameOverScreen();
+      grid = createGrid();
+      render();
+      takeTurn();
+    }, 300);
   };
 
 });
