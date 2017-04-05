@@ -1,6 +1,7 @@
+var side = 25;
 
 $(document).ready(function() {
-
+  
   snake = createSnake();
   grid = createGrid(snake);
   render(grid);
@@ -12,9 +13,9 @@ $(document).ready(function() {
 
   function createGrid(snake) {
     var grid = [];
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < side; i++) {
       grid.push([]);
-      for (var j = 0; j < 40; j++) {
+      for (var j = 0; j < side; j++) {
         grid[i].push(" ");
       }
     }
@@ -23,12 +24,13 @@ $(document).ready(function() {
   };
 
   function createSnake() {
+    var midpoint = Math.floor(side/2)
     var snake = {
-      position: [20, 20],
+      position: [midpoint, midpoint],
       direction: "r",
-      coordinates: [[20, 20]],
+      coordinates: [[midpoint, midpoint]],
     }
-    return snake
+    return snake;
   };
 
   function render(grid) {
@@ -89,10 +91,22 @@ $(document).ready(function() {
   function takeTurn() {
     setTimeout(function() {
       moveSnake(grid, snake);
+      if (gameOver()) return gameOverScreen();
       grid = createGrid(snake);
       render(grid);
       takeTurn();
     }, 750);
+  };
+
+  function gameOver() {
+    if (snake.position[0] < 0 || snake.position[0] > side ||
+        snake.position[1] < 0 || snake.position[1] > side) {
+      return true;
+    }
+  };
+
+  function gameOverScreen() {
+    alert("Game over!");
   };
 
 });
