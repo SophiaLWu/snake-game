@@ -1,7 +1,9 @@
-var side = 20;
+
 
 $(document).ready(function() {
-  
+
+  var side = 20;
+  var speed = 220;
   var snake = createSnake();
   var food = generateFood();
   grid = createGrid();
@@ -205,6 +207,7 @@ $(document).ready(function() {
       if (eatFood()) {
         food = generateFood();
         growSnake();
+        if (speed > 5) speed -= 8;
       }
       var newPosition = newMove();
       if (gameOver(newPosition)) return gameOverScreen();
@@ -212,7 +215,7 @@ $(document).ready(function() {
       grid = createGrid();
       render();
       takeTurn();
-    }, 150);
+    }, speed);
   };
 
 });
