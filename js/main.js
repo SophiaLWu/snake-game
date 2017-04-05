@@ -5,7 +5,7 @@ $(document).ready(function() {
   grid = createGrid(snake);
   render(grid);
   changeDirection(snake);
-  timeout();
+  takeTurn();
 
 
   // Function definitions
@@ -86,12 +86,12 @@ $(document).ready(function() {
     }
   };
 
-  function timeout() {
+  function takeTurn() {
     setTimeout(function() {
       moveSnake(grid, snake);
       grid = createGrid(snake);
       render(grid);
-      timeout();
+      takeTurn();
     }, 750);
   };
 
