@@ -83,18 +83,28 @@ $(document).ready(function() {
   // Changes the direction of the snake based on key input
   function changeDirection() {
     $(document).keydown(function(event) {
+      var originalDirection = snake.direction
+      var snakeLength = snake.coordinates.length
       switch(event.which) {
         case 37:
-          snake.direction = "l"
+          if (snakeLength == 1 || originalDirection != "r") {
+            snake.direction = "l";
+          }
           break;
         case 38:
-          snake.direction = "u"
+          if (snakeLength == 1 || originalDirection != "d") {
+            snake.direction = "u";
+          }
           break;
         case 39:
-          snake.direction = "r"
+          if (snakeLength == 1 || originalDirection != "l") {
+            snake.direction = "r";
+          }
           break;
         case 40:
-          snake.direction = "d"
+          if (snakeLength == 1 || originalDirection != "u") {
+            snake.direction = "d";
+          }
           break
         default: return;
       }
