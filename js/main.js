@@ -20,6 +20,8 @@ $(document).ready(function() {
 
   // Start new game
   function init() {
+    pause = false;
+    restart = false;
     score = 0;
     foodPoints = 1;
     speed = 220;
@@ -59,8 +61,9 @@ $(document).ready(function() {
   function generateFood() {
     var x = getRandomNumber("x");
     var y = getRandomNumber("y");
-    while (x === snake.position[0] && y === snake.position[1]) {
+    while (foodOnSnake(x, y)) {
       x = getRandomNumber("x");
+      y = getRandomNumber("y");
     }
     var food = { position: [x, y] }
     return food;
@@ -74,6 +77,16 @@ $(document).ready(function() {
     }
     return number; 
   };
+
+  // Returns true if the given food coordinates are on the snake
+  function foodOnSnake(x, y) {
+    for (var i = 0; i < snake.coordinates.length; i++) {
+      if (snake.coordinates[i][0] == x || snake.coordinates[i][1] == y) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // Renders grid and score to html
   function render() {
@@ -250,7 +263,6 @@ $(document).ready(function() {
   function takeTurn() {
     setTimeout(function() {
       if (restart) {
-        restart = false;
         init();
       }
       else if (!restart && !pause) {
@@ -268,7 +280,6 @@ $(document).ready(function() {
   // Starts game again if player clicks 'play again?'
   function playAgain() {
     $(".play-again").on("click", function() {
-      restart = true;
       $(".game-over").css("display", "none");
       takeTurn();
     });
