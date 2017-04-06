@@ -4,6 +4,8 @@
    box-sizing: border-box;
 }
 
+/* Buttons and link */
+
 a, a:visited {
   text-decoration: none;
   color: black;
@@ -13,13 +15,17 @@ a:hover, a:active, a:focus {
   color: white;
 }
 
+.btn:hover, .btn:active, .btn:focus {
+  cursor: pointer;
+  background: #b5bab2;
+}
+
+
+/* Shared */
+
 body {
   background: #a7bc98;
   font-family: 'Amatic SC', cursive;
-}
-
-.title {
-  text-align: center;
 }
 
 h1 {
@@ -38,6 +44,13 @@ h2 {
   padding: 3px;
   font-size: 30px;
   background: white;
+}
+
+
+/* Main content */
+
+.title {
+  text-align: center;
 }
 
 .container {
@@ -113,7 +126,25 @@ h2 {
 }
 
 
-/* Game over screen */
+/* Play button */
+
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: #3e423b;
+  box-shadow: 5px 5px 5px #000;
+  text-align: center;
+  color: white;
+  font-size: 45px;
+  transform: translate(-50%, -50%);
+}
+
+/* Game over screens */
+
 .game-over {
   position: absolute;
   top: 50%;
@@ -141,11 +172,6 @@ h2 {
   background: white;
   box-shadow: 3px 3px 3px #000;
   color: black;
-}
-
-.play-again:hover, .play-again:active, .play-again:focus {
-  cursor: pointer;
-  background: #b5bab2;
 }
 
 /* Footer */

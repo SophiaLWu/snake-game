@@ -13,13 +13,23 @@ $(document).ready(function() {
   var food = generateFood();
   changeDirection();
   gameSettings();
-  takeTurn();
+  grid = createGrid();
+  render();
+  start();
 
   ////////////////////////////
   //  Function definitions  //
   ////////////////////////////
 
-  // Start new game
+  // Initial start of game
+  function start() {
+    $(".play").on("click", function() {
+      $(".play").fadeOut(400);
+      takeTurn();
+    });
+  }
+
+  // Starts a new game
   function init() {
     pause = false;
     restart = false;
