@@ -2,6 +2,7 @@
 
 $(document).ready(function() {
   $(".game-over").hide();
+  var timer;
   var pause = false;
   var restart = false;
   var side = 20;
@@ -183,6 +184,7 @@ $(document).ready(function() {
 
   // Allows settings to change if food is eaten
   function eatFoodSettings() {
+    console.log('eat');
     score += foodPoints;
     foodPoints += 1;
     food = generateFood();
@@ -261,7 +263,8 @@ $(document).ready(function() {
 
   // Allows one 'turn' to take place
   function takeTurn() {
-    setTimeout(function() {
+    timer = setTimeout(function() {
+      console.log(speed);
       if (restart) {
         init();
       }
@@ -285,7 +288,8 @@ $(document).ready(function() {
   function playAgain() {
     $(".play-again").on("click", function() {
       $(".game-over").fadeOut(400);
-      init();
+      restart = true;
+      clearTimeout(timer);
       takeTurn();
     });
   };
