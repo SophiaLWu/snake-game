@@ -6,4 +6,4 @@ This is a web app developed using JavaScript/jQuery and is a project as describe
 [Play the game!](https://sophialwu.github.io/snake-game/)
 
 ## TODO
-- Game doesn't start automatically (until you click a 'Play' button)
+- More styling
