@@ -6,11 +6,12 @@ $(document).ready(function() {
   var side = 20;
   var score = 0;
   var foodPoints = 1;
-  var speed = 220;
+  var speed = 200;
   var snake = createSnake();
   var food = generateFood();
   changeDirection();
   gameSettings();
+  playAgain();
   takeTurn();
 
   ////////////////////////////
@@ -225,7 +226,8 @@ $(document).ready(function() {
 
   // Displays game over screen
   function gameOverScreen() {
-    alert("Game over!");
+    $(".final-score").html(score);
+    $(".game-over").css("display", "inline-block");
   };
 
   // Changes the pause or restart variables based on keyboard input
@@ -261,6 +263,15 @@ $(document).ready(function() {
       }
       takeTurn();
     }, speed);
+  };
+
+  // Starts game again if player clicks 'play again?'
+  function playAgain() {
+    $(".play-again").on("click", function() {
+      restart = true;
+      $(".game-over").css("display", "none");
+      takeTurn();
+    });
   };
 
 });
