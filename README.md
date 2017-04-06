@@ -2,3 +2,6 @@
 This is a classic snake game where the player controls a snake that moves around the board and grows longer with each piece of food it eats. The player loses the game if it gets so big that it hits itself or goes off the board.
 
 This is a web app developed using JavaScript/jQuery and is a project as described in [The Odin Project](http://www.theodinproject.com/courses/javascript-and-jquery/lessons/jquery-and-the-dom).
+
+## TODO
+- Food can't appear on top of snake

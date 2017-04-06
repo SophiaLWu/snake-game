@@ -5,12 +5,28 @@
     <title>Snake</title>
     <link rel="stylesheet" href="css/css-reset.css">
     <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
     <script src="js/jquery-3.2.0.min.js"></script>
     <script src="js/main.js"></script>
   </head>
   <body>
-    <h1>Snake</h1>
-    <h2 class="score"></h2>
-    <div class="container"></div>
+    <div class="title"><h1>Snake</h1></div>
+    
+    <div class="container">
+      <div class="info-wrapper">
+        <div class="score-container"><h2 class="info score"></h2></div>
+        <div class="settings-container">
+          <h2 class="info">Press P to pause and R to restart</h2>
+        </div>
+      </div>
+      <div class="grid"></div>
+    </div>
+
+    <footer>
+      <small>&copy Sophia Wu</small>
+      <small>
+        <a href="https://github.com/SophiaLWu/snake-game">Github</a>
+      </small>
+    </footer>
   </body>
 </html>

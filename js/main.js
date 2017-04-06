@@ -35,9 +35,10 @@ $(document).ready(function() {
         grid[i].push(" ");
       }
     }
-    grid[food.position[0]][food.position[1]] = "F"
-    for (var i = 0; i < snake.coordinates.length; i++) {
-      grid[snake.coordinates[i][0]][snake.coordinates[i][1]] = "O";
+    grid[food.position[0]][food.position[1]] = "food";
+    grid[snake.position[0]][snake.position[1]] = "head";
+    for (var i = 1; i < snake.coordinates.length; i++) {
+      grid[snake.coordinates[i][0]][snake.coordinates[i][1]] = "body";
     }
     return grid;
   };
@@ -75,12 +76,18 @@ $(document).ready(function() {
 
   // Renders grid and score to html
   function render() {
-    var gridRender = "<div class='grid'>"
+    var gridRender = ""
     for (var row = 0; row < grid.length; row++) {
       gridRender += "<ul class='row row" + row + "'>"
       for (var col = 0; col < grid.length; col++) {
-        if (grid[row][col] == "O") {
+        if (grid[row][col] == "body") {
           gridRender += "<li class='col snake'></li>";
+        }
+        else if (grid[row][col] == "head") {
+          gridRender += "<li class='col snake snake-head'><img src='images/snake-eyes.png'></li>";
+        }
+        else if (grid[row][col] == "food") {
+          gridRender += "<li class='col food'><img src='images/apple.jpg'></li>";
         }
         else {
           gridRender += "<li class='col'>" + grid[row][col] + "</li>";
@@ -88,8 +95,7 @@ $(document).ready(function() {
       }
       gridRender += "</ul>";
     }
-    gridRender += "</div>";
-    $(".container").html(gridRender);
+    $(".grid").html(gridRender);
     $(".score").html("Score: " + score);
   };
 
