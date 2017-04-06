@@ -3,5 +3,7 @@ This is a classic snake game where the player controls a snake that moves around
 
 This is a web app developed using JavaScript/jQuery and is a project as described in [The Odin Project](http://www.theodinproject.com/courses/javascript-and-jquery/lessons/jquery-and-the-dom).
 
+[Play the game!](https://sophialwu.github.io/snake-game/)
+
 ## TODO
 - Food can't appear on top of snake
