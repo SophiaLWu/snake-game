@@ -1,20 +1,30 @@
 
 
 $(document).ready(function() {
-
+  var pause = false;
+  var restart = false;
   var side = 20;
+  var score = 0;
+  var foodPoints = 1;
   var speed = 220;
   var snake = createSnake();
   var food = generateFood();
-  grid = createGrid();
-  render();
   changeDirection();
+  gameSettings();
   takeTurn();
-
 
   ////////////////////////////
   //  Function definitions  //
   ////////////////////////////
+
+  // Start new game
+  function init() {
+    score = 0;
+    foodPoints = 1;
+    speed = 220;
+    snake = createSnake();
+    food = generateFood();
+  }
 
   // Returns a 2D array representing the grid
   function createGrid() {
@@ -63,7 +73,7 @@ $(document).ready(function() {
     return number; 
   };
 
-  // Renders the grid to html
+  // Renders grid and score to html
   function render() {
     var gridRender = "<div class='grid'>"
     for (var row = 0; row < grid.length; row++) {
@@ -79,38 +89,41 @@ $(document).ready(function() {
       gridRender += "</ul>";
     }
     gridRender += "</div>";
-    $(".container").html(gridRender)
+    $(".container").html(gridRender);
+    $(".score").html("Score: " + score);
   };
 
   // Changes the direction of the snake based on key input
   function changeDirection() {
     $(document).keydown(function(event) {
-      var originalDirection = snake.direction
-      var snakeLength = snake.coordinates.length
-      switch(event.which) {
-        case 37:
-          if (snakeLength == 1 || originalDirection != "r") {
-            snake.direction = "l";
-          }
-          break;
-        case 38:
-          if (snakeLength == 1 || originalDirection != "d") {
-            snake.direction = "u";
-          }
-          break;
-        case 39:
-          if (snakeLength == 1 || originalDirection != "l") {
-            snake.direction = "r";
-          }
-          break;
-        case 40:
-          if (snakeLength == 1 || originalDirection != "u") {
-            snake.direction = "d";
-          }
-          break
-        default: return;
+      if (!pause) {
+        var originalDirection = snake.direction
+        var snakeLength = snake.coordinates.length
+        switch(event.which) {
+          case 37:
+            if (snakeLength == 1 || originalDirection != "r") {
+              snake.direction = "l";
+            }
+            break;
+          case 38:
+            if (snakeLength == 1 || originalDirection != "d") {
+              snake.direction = "u";
+            }
+            break;
+          case 39:
+            if (snakeLength == 1 || originalDirection != "l") {
+              snake.direction = "r";
+            }
+            break;
+          case 40:
+            if (snakeLength == 1 || originalDirection != "u") {
+              snake.direction = "d";
+            }
+            break
+          default: return;
+        }
+        event.preventDefault();
       }
-      event.preventDefault();
     });
   };
 
@@ -148,6 +161,15 @@ $(document).ready(function() {
     }
   };
 
+  // Allows settings to change if food is eaten
+  function eatFoodSettings() {
+    score += foodPoints;
+    foodPoints += 1;
+    food = generateFood();
+    growSnake();
+    if (speed > 5) speed -= 8;
+  };
+
   // Grows snake by 1 unit
   function growSnake() {
     var snakeBody = snake.coordinates
@@ -162,13 +184,12 @@ $(document).ready(function() {
         break;
       case "r":
         snake.position[1] += 1;
-        break;
+        break;r
       case "d":
         snake.position[0] += 1;
         break;
       default: return;
     }
-
     snake.coordinates.unshift([snake.position[0], snake.position[1]]);
   };
 
@@ -201,19 +222,37 @@ $(document).ready(function() {
     alert("Game over!");
   };
 
+  // Changes the pause or restart variables based on keyboard input
+  function gameSettings() {
+    $(document).keydown(function(event) {
+      switch(event.which) {
+        case 80:
+          pause = !pause;
+          break;
+        case 82:
+          restart = true;
+          break;
+        default: return;
+      }
+      event.preventDefault();
+    });
+  };
+
   // Allows one 'turn' to take place
   function takeTurn() {
     setTimeout(function() {
-      if (eatFood()) {
-        food = generateFood();
-        growSnake();
-        if (speed > 5) speed -= 8;
+      if (restart) {
+        restart = false;
+        init();
       }
-      var newPosition = newMove();
-      if (gameOver(newPosition)) return gameOverScreen();
-      moveSnake(newPosition);
-      grid = createGrid();
-      render();
+      else if (!restart && !pause) {
+        if (eatFood()) eatFoodSettings();
+        var newPosition = newMove();
+        if (gameOver(newPosition)) return gameOverScreen();
+        moveSnake(newPosition);
+        grid = createGrid();
+        render();
+      }
       takeTurn();
     }, speed);
   };
