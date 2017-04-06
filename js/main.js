@@ -1,6 +1,7 @@
 
 
 $(document).ready(function() {
+  $(".game-over").hide();
   var pause = false;
   var restart = false;
   var side = 20;
@@ -11,7 +12,6 @@ $(document).ready(function() {
   var food = generateFood();
   changeDirection();
   gameSettings();
-  playAgain();
   takeTurn();
 
   ////////////////////////////
@@ -24,7 +24,7 @@ $(document).ready(function() {
     restart = false;
     score = 0;
     foodPoints = 1;
-    speed = 220;
+    speed = 200;
     snake = createSnake();
     food = generateFood();
   }
@@ -240,7 +240,7 @@ $(document).ready(function() {
   // Displays game over screen
   function gameOverScreen() {
     $(".final-score").html(score);
-    $(".game-over").css("display", "inline-block");
+    $(".game-over").fadeIn(400);
   };
 
   // Changes the pause or restart variables based on keyboard input
@@ -268,7 +268,11 @@ $(document).ready(function() {
       else if (!restart && !pause) {
         if (eatFood()) eatFoodSettings();
         var newPosition = newMove();
-        if (gameOver(newPosition)) return gameOverScreen();
+        if (gameOver(newPosition)) {
+          gameOverScreen();
+          playAgain();
+          return;
+        }
         moveSnake(newPosition);
         grid = createGrid();
         render();
@@ -280,7 +284,8 @@ $(document).ready(function() {
   // Starts game again if player clicks 'play again?'
   function playAgain() {
     $(".play-again").on("click", function() {
-      $(".game-over").css("display", "none");
+      $(".game-over").fadeOut(400);
+      init();
       takeTurn();
     });
   };
