@@ -186,10 +186,8 @@ $(document).ready(function() {
 
   // Returns true if the snake's head eats the food
   function eatFood() {
-    if (snake.position[0] === food.position[0] &&
-        snake.position[1] === food.position[1]) { 
-      return true;
-    }
+    return (snake.position[0] === food.position[0] &&
+            snake.position[1] === food.position[1])
   };
 
   // Allows settings to change if food is eaten
